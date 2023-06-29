@@ -1,12 +1,14 @@
 
 import "./app.sass";
 
-import PopupGreeting from "../popupGreeting/PopupGreeting";
+import BoardsPage from "../../pages/boardsPage/BoardsPage";
+import PopupGreeting from "../main/popupGreeting/PopupGreeting";
 
 function App() {
   return (
     <div className="app">
-      <PopupGreeting />
+      {/* <PopupGreeting /> */}
+      <BoardsPage />
     </div>
   );
 }

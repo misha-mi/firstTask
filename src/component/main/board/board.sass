@@ -1,0 +1,47 @@
+
+.board
+  width: 300px
+  height: 100%
+  padding: 20px
+  background-color: #f1f2f4
+  flex-shrink: 0
+  border-radius: 10px
+  &__header
+    display: flex
+    justify-content: space-between
+  &__title
+    width: 100%
+    border: none
+    border-radius: 4px
+    background-color: #f1f2f4
+    cursor: pointer
+    &:focus
+      background: white
+  &__extras
+    width: 30px
+    height: 30px
+    padding: 8px 0
+    border-radius: 4px
+    font-size: 12px
+    line-height: 12px
+    text-align: center
+    flex-shrink: 0
+    cursor: pointer
+    &:hover
+      background: rgba(black, 0.1)
+  &__cards
+    display: flex
+    flex-direction: column
+    margin-top: 20px
+    gap: 10px
+
+.card
+  width: 100%
+  min-height: 70px
+  padding: 10px
+  border-radius: 10px
+  box-shadow: 5px 5px 10px #0000001f
+  background-color: white
+  cursor: pointer
+  &:hover
+    background-color: #f1f2f4
