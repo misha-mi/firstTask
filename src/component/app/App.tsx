@@ -1,14 +1,17 @@
 
 import "./app.sass";
 
-import BoardsPage from "../../pages/boardsPage/BoardsPage";
 import PopupGreeting from "../main/popupGreeting/PopupGreeting";
+import ColumnsPage from "../../pages/columnsPage/ColumnsPage";
+import CardPage from "../../pages/cardPage/CardPage";
+
 
 function App() {
   return (
     <div className="app">
       {/* <PopupGreeting /> */}
-      <BoardsPage />
+      <ColumnsPage />
+      {/* <CardPage /> */}
     </div>
   );
 }
