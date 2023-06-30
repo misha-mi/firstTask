@@ -3,16 +3,17 @@ import "./popupGreeting.sass";
 
 import { FC, useState, FormEvent } from "react";
 
+import useLocalStorage from "../../../service/useLocalStorage";
+
 interface IPopupGreeting {
   acceptGreeting: () => void;
 }
 
 const PopupGreeting: FC<IPopupGreeting> = ({ acceptGreeting }) => {
 
-  const [nameUser, setNameUser] = useState<string>("");
+  const [nameUser, setNameUser] = useLocalStorage("name", "");
 
   const accept = () => {
-    localStorage.setItem("nameUser", nameUser);
     acceptGreeting();
   }
 
@@ -24,7 +25,7 @@ const PopupGreeting: FC<IPopupGreeting> = ({ acceptGreeting }) => {
           type="text"
           className="popupGreeting__input"
           value={nameUser}
-          onInput={(e: FormEvent<HTMLInputElement>) => setNameUser((e.target as HTMLTextAreaElement).value)} />
+          onInput={(e: FormEvent<HTMLInputElement>) => setNameUser((e.target as HTMLInputElement).value)} />
         <button
           className="popupGreeting__button"
           onClick={() => accept()}>Подтвердить</button>

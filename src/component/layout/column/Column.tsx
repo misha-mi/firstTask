@@ -6,28 +6,37 @@ import Card from "../card/Card";
 
 import { FC } from "react";
 
+import useLocalStorage from "../../../service/useLocalStorage";
+
 interface IColumn {
   name: string
-  arrCards: {
-    name: string
-    countComments: number
-  }[]
+  idColumn: number,
+  cards: {
+    name: string,
+    countComments: number,
+    id: number,
+  }[],
+  addCard: ([]) => void
+  setNameColumn: (newName: string) => void
 }
 
-const Column: FC<IColumn> = ({ name, arrCards }) => {
+const Column: FC<IColumn> = ({ name, idColumn, cards, addCard, setNameColumn }) => {
+
   return (
     <div className="column">
       <div className="column__header">
-        <TextArea initValue={name} modificator="title" />
+        <TextArea initValue={name} modificator="title" setValue={setNameColumn} />
       </div>
       <div className="column__cards">
         {
-          arrCards.map(({ name, countComments }) => (
-            <Card />
+          cards.map(({ name, countComments, id }) => (
+            id === idColumn ? <Card name={name} countComments={countComments} /> : null
           ))
         }
       </div>
-      <button className="column__add">
+      <button
+        className="column__add"
+        onClick={() => addCard([...cards, { name: "", countComments: 0, id: idColumn }])}>
         + Добавить карточку
       </button>
     </div>

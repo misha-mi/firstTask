@@ -6,16 +6,22 @@ import { FC, useState, FormEvent, useRef, useEffect } from "react";
 interface ITextArea {
   initValue: string
   modificator?: string // модификация размеров шрифта
-  mod?: boolean
+  mod?: boolean,
+  setValue?: (value: string) => void
 }
 
-const TextArea: FC<ITextArea> = ({ initValue, modificator = "", mod = true }) => {
+const TextArea: FC<ITextArea> = ({ initValue, modificator = "", mod = true, setValue }) => {
 
   const [valueInput, setValueInput] = useState<string>(initValue);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
   const inputTextArea = (value: string): void => {
+
     setValueInput(value);
+    if (setValue) {
+      setValue(value);
+    }
+
     if (textAreaRef.current != null) {
       textAreaRef.current.style.height = 0 + "px";
       textAreaRef.current.style.height = textAreaRef.current?.scrollHeight + "px";
