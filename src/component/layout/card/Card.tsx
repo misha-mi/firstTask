@@ -8,7 +8,12 @@ import SmallButton from "../../ui/smallButton/SmallButton";
 
 import { FC, useRef, useState } from "react";
 
-const Card: FC = () => {
+interface ICard {
+  name: string;
+  countComments: number
+}
+
+const Card: FC<ICard> = ({ name, countComments }) => {
 
   const [showPopupEditCard, setShowPopupEditCard] = useState<boolean>(false);
 
