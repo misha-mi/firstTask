@@ -6,15 +6,26 @@ import Card from "../card/Card";
 
 import { FC } from "react";
 
-const Column: FC = () => {
+interface IColumn {
+  name: string
+  arrCards: {
+    name: string
+    countComments: number
+  }[]
+}
+
+const Column: FC<IColumn> = ({ name, arrCards }) => {
   return (
     <div className="column">
       <div className="column__header">
-        <TextArea initValue="Тайтл картинки" modificator="title" />
+        <TextArea initValue={name} modificator="title" />
       </div>
       <div className="column__cards">
-        <Card />
-        <Card />
+        {
+          arrCards.map(({ name, countComments }) => (
+            <Card />
+          ))
+        }
       </div>
       <button className="column__add">
         + Добавить карточку

@@ -15,7 +15,7 @@ enum Page {
 
 function App() {
 
-  const [page, setPage] = useState<Page>(Page.columns); // стайте определяющий, какя страница открыта
+  const [page, setPage] = useState<Page>(Page.columns); // state определяющий, какя страница открыта
 
   const acceptGreeting = () => {
     setPage(Page.columns);
