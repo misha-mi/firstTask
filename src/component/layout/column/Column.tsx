@@ -6,22 +6,22 @@ import Card from "../card/Card";
 
 import { FC } from "react";
 
-import useLocalStorage from "../../../service/useLocalStorage";
+import { v4 as uuidv4 } from 'uuid';
 
 interface IColumn {
   name: string
-  idColumn: number,
+  id: number,
   cards: {
     name: string,
     countComments: number,
-    id: number,
+    idColumn: number,
+    idCard: number
   }[],
   addCard: ([]) => void
   setNameColumn: (newName: string) => void
 }
 
-const Column: FC<IColumn> = ({ name, idColumn, cards, addCard, setNameColumn }) => {
-
+const Column: FC<IColumn> = ({ name, id, cards, addCard, setNameColumn }) => {
   return (
     <div className="column">
       <div className="column__header">
@@ -29,14 +29,14 @@ const Column: FC<IColumn> = ({ name, idColumn, cards, addCard, setNameColumn }) 
       </div>
       <div className="column__cards">
         {
-          cards.map(({ name, countComments, id }) => (
-            id === idColumn ? <Card name={name} countComments={countComments} /> : null
+          cards.map(({ name, countComments, idColumn, idCard }) => (
+            id === idColumn ? <Card name={name} countComments={countComments} key={idCard} idCard={idCard} /> : null
           ))
         }
       </div>
       <button
         className="column__add"
-        onClick={() => addCard([...cards, { name: "", countComments: 0, id: idColumn }])}>
+        onClick={() => addCard([...cards, { name: "", countComments: 0, idColumn: id, idCard: uuidv4() }])}>
         + Добавить карточку
       </button>
     </div>
