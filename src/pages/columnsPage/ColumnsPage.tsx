@@ -12,6 +12,9 @@ const ColumnsPage: FC = () => {
       <div className="columns-page__name">Миша</div>
       <div className="columns-page__wrapper">
         <Column />
+        <Column />
+        <Column />
+        <Column />
       </div>
     </div>
   )

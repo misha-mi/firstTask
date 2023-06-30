@@ -14,6 +14,7 @@ const Column: FC = () => {
       </div>
       <div className="column__cards">
         <Card />
+        <Card />
       </div>
       <button className="column__add">
         + Добавить карточку
