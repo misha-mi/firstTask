@@ -1,29 +1,33 @@
 
 import "./cardPage.sass";
+import trash from "../../assets/trash.png";
+import close from "../../assets/close.png";
 
-import Input from "../../component/common/input/Input";
+import TextArea from "../../component/ui/textArea/TextArea";
+import SmallButton from "../../component/ui/smallButton/SmallButton";
+import Title from "../../component/ui/title/Title";
+import Comments from "../../component/layout/comments/Comments";
 
 import { FC } from "react";
 
 const CardPage: FC = () => {
   return (
     <div className="cardPage">
-      <Input initValue="Тайтл картинки" />
+      <div className="cardPage__header">
+        <TextArea initValue="Тайтл картинки" modificator="title" />
+        <SmallButton png={close} />
+        <SmallButton png={trash} />
+      </div>
       <p className="cardPage__info">
         <span className="cardPage__column-name">Колонка: TODO</span>
         <span className="cardPage__author">Автор: Me</span>
       </p>
-      <div className="cardPage__wrapper">
-        <div className="cardPage__title">Описание</div>
-        <textarea className="cardPage__descr"></textarea>
+      <div className="cardPage__description">
+        <Title title="Описание" />
+        <TextArea initValue={"dsfa"} />
       </div>
-      <div className="cardPage__wrapper">
-        <div className="cardPage__title">Комментарии</div>
-        <textarea className="cardPage__comment-add">Добавить коммент</textarea>
-        <div className="cardPage__comment">
-          <div className="cardPage__comment-name">Имя</div>
-          <textarea className="cardPage__comment-text">Какой-то коммент</textarea>
-        </div>
+      <div className="cardPage__comments">
+        <Comments />
       </div>
     </div>
   )
