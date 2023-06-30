@@ -3,10 +3,18 @@ import "./popupGreeting.sass";
 
 import { FC, useState, FormEvent } from "react";
 
-const PopupGreeting: FC = () => {
+interface IPopupGreeting {
+  acceptGreeting: () => void;
+}
+
+const PopupGreeting: FC<IPopupGreeting> = ({ acceptGreeting }) => {
 
   const [nameUser, setNameUser] = useState<string>("");
 
+  const accept = () => {
+    localStorage.setItem("nameUser", nameUser);
+    acceptGreeting();
+  }
 
   return (
     <div className="popupGreeting">
@@ -19,7 +27,7 @@ const PopupGreeting: FC = () => {
           onInput={(e: FormEvent<HTMLInputElement>) => setNameUser((e.target as HTMLTextAreaElement).value)} />
         <button
           className="popupGreeting__button"
-          onClick={() => localStorage.setItem("nameUser", nameUser)}>Подтвердить</button>
+          onClick={() => accept()}>Подтвердить</button>
       </div>
     </div>
   )
