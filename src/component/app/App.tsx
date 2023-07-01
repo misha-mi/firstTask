@@ -13,12 +13,12 @@ enum Page {
 }
 
 interface IContext {
-  openPageID: number,
-  setOpenPageID: (c: number) => void
+  openPageID: string,
+  setOpenPageID: (c: string) => void
 }
 
 export const ContextPage = createContext<IContext>({
-  openPageID: -1, // set a default value
+  openPageID: "-1",
   setOpenPageID: () => { },
 })
 
@@ -26,7 +26,7 @@ function App() {
 
   const [page, setPage] = useState<Page>(Page.columns); // state определяющий, какя страница открыта
 
-  const [openPageID, setOpenPageID] = useState<number>(-1);
+  const [openPageID, setOpenPageID] = useState<string>("-1");
 
   const acceptGreeting = () => {
     setPage(Page.columns);
@@ -44,7 +44,7 @@ function App() {
       <ContextPage.Provider value={{ openPageID, setOpenPageID }}>
         {showPage}
         {
-          openPageID !== -1 ? (
+          openPageID !== "-1" ? (
             <div className="app__card">
               <CardPage />
             </div>

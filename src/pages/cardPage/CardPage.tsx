@@ -9,20 +9,26 @@ import Title from "../../component/ui/title/Title";
 import Comments from "../../component/layout/comments/Comments";
 import { ContextPage } from "../../component/app/App";
 
-import { FC, useContext } from "react";
+import useOutsideClick from "../../hook/useOutsideClick";
+
+import { FC, useContext, useRef } from "react";
 
 const CardPage: FC = () => {
 
   const { setOpenPageID } = useContext(ContextPage);
 
+  const pageRef = useRef(null);
+
+  useOutsideClick(pageRef, () => setOpenPageID("-1"));
+
   return (
-    <div className="cardPage">
+    <div className="cardPage" ref={pageRef}>
       <div className="cardPage__header">
         <TextArea initValue="Тайтл картинки" modificator="title" />
         <div>
           <SmallButton png={trash} />
         </div>
-        <div onClick={() => setOpenPageID(-1)}>
+        <div onClick={() => setOpenPageID("-1")}>
           <SmallButton png={close} />
         </div>
       </div>
