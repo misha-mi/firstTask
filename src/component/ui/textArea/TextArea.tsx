@@ -20,7 +20,6 @@ const TextArea: FC<ITextArea> = ({ initValue, modificator = "", mod = true, focu
 
     setValueInput(value);
     if (setValue) {
-      console.log(value);
       setValue(value);
     }
 
@@ -32,7 +31,7 @@ const TextArea: FC<ITextArea> = ({ initValue, modificator = "", mod = true, focu
 
   useEffect(() => {
     if (focus) {
-      textAreaRef.current?.focus();
+      setTimeout(() => textAreaRef.current?.focus());
     }
     inputTextArea(valueInput);
   }, [mod])

@@ -3,8 +3,9 @@ import "./column.sass";
 
 import TextArea from "../../ui/textArea/TextArea";
 import Card from "../card/Card";
+import AddCard from "../addCard/AddCard";
 
-import { FC, useState, useRef } from "react";
+import { FC, useState } from "react";
 
 import { v4 as uuidv4 } from 'uuid';
 
@@ -55,22 +56,7 @@ const Column: FC<IColumn> = ({ name, id, cards, addCard, setNameColumn }) => {
         }
 
         {
-          addBool ? (
-            <div>
-              <TextArea initValue={""} setValue={setNameNewCard} focus={true} />
-              <button
-                className={"column__add"}
-                onClick={() => addNewCard()}
-              >
-                Сохранить
-              </button><button
-                className={"column__add"}
-                onClick={() => setAddBool(false)}
-              >
-                Отмена
-              </button>
-            </div>
-          ) : null
+          addBool ? <AddCard setNameNewCard={setNameNewCard} addNewCard={addNewCard} setAddBool={setAddBool} /> : null
         }
       </div>
 
