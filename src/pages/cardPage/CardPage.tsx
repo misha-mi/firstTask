@@ -10,6 +10,7 @@ import Comments from "../../component/layout/comments/Comments";
 import { ContextPage } from "../../component/app/App";
 
 import useOutsideClick from "../../hook/useOutsideClick";
+import useClickKey from "../../service/useClickKey";
 
 import { FC, useContext, useRef } from "react";
 
@@ -20,6 +21,7 @@ const CardPage: FC = () => {
   const pageRef = useRef(null);
 
   useOutsideClick(pageRef, () => setOpenPageID("-1"));
+  useClickKey("Escape", () => setOpenPageID("-1"));
 
   return (
     <div className="cardPage" ref={pageRef}>

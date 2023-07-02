@@ -2,7 +2,8 @@ import TextArea from "../../ui/textArea/TextArea"
 
 import { FC, useRef } from "react"
 
-import useOutsideClick from "../../../hook/useOutsideClick"
+import useOutsideClick from "../../../hook/useOutsideClick";
+import useClickKey from "../../../service/useClickKey";
 
 interface IAddCard {
   setNameNewCard: (name: string) => void,
@@ -15,6 +16,7 @@ const AddCard: FC<IAddCard> = ({ setNameNewCard, addNewCard, setAddBool }) => {
   const ref = useRef(null);
 
   useOutsideClick(ref, () => setAddBool(false));
+  useClickKey("Escape", () => setAddBool(false));
 
   return (
     <div ref={ref}>
