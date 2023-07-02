@@ -3,42 +3,74 @@ import "./column.sass";
 
 import TextArea from "../../ui/textArea/TextArea";
 import Card from "../card/Card";
+import AddCard from "../addCard/AddCard";
 
-import { FC } from "react";
+import { FC, useState } from "react";
 
-import useLocalStorage from "../../../service/useLocalStorage";
+import { v4 as uuidv4 } from 'uuid';
 
 interface IColumn {
   name: string
-  idColumn: number,
+  id: number,
   cards: {
     name: string,
     countComments: number,
-    id: number,
+    idColumn: number,
+    idCard: string
   }[],
   addCard: ([]) => void
   setNameColumn: (newName: string) => void
 }
 
-const Column: FC<IColumn> = ({ name, idColumn, cards, addCard, setNameColumn }) => {
+const Column: FC<IColumn> = ({ name, id, cards, addCard, setNameColumn }) => {
+
+  const [addBool, setAddBool] = useState<boolean>(false);
+  const [nameNewCard, setNameNewCard] = useState<string>("");
+
+  const addNewCard = () => {
+    if (nameNewCard) {
+      addCard([...cards, { name: nameNewCard, countComments: 0, idColumn: id, idCard: uuidv4() }]);
+      setAddBool(false);
+    }
+  }
 
   return (
     <div className="column">
+
       <div className="column__header">
         <TextArea initValue={name} modificator="title" setValue={setNameColumn} />
       </div>
+
       <div className="column__cards">
         {
-          cards.map(({ name, countComments, id }) => (
-            id === idColumn ? <Card name={name} countComments={countComments} /> : null
+          cards.map(({ name, countComments, idColumn, idCard }) => (
+            id === idColumn ? (
+              <Card
+                name={name}
+                countComments={countComments}
+                key={idCard}
+                idCard={idCard}
+              />
+            ) : null
           ))
         }
+
+        {
+          addBool ? <AddCard setNameNewCard={setNameNewCard} addNewCard={addNewCard} setAddBool={setAddBool} /> : null
+        }
       </div>
-      <button
-        className="column__add"
-        onClick={() => addCard([...cards, { name: "", countComments: 0, id: idColumn }])}>
-        + Добавить карточку
-      </button>
+
+      {
+        !addBool ? (
+          <button
+            className={"column__add"}
+            onClick={() => setAddBool(true)}
+          >
+            + Добавить карточку
+          </button>
+        ) : null
+      }
+
     </div>
   )
 }

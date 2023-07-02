@@ -16,7 +16,7 @@ const ColumnsPage: FC = () => {
     "Testing",
     "Done"
   ]);
-  const [cards, setCards] = useLocalStorage("cards", [{ name: "", countComments: 0, id: 0 }]);
+  const [cards, setCards] = useLocalStorage("cards", [{ name: "", countComments: 0, idColumn: 0, idCard: "" }]);
 
   const removeColumn = (newName: string, id: number): void => {
     setColumns([...columns.slice(0, id), newName, ...columns.slice(id + 1)]);
@@ -27,7 +27,14 @@ const ColumnsPage: FC = () => {
       <TextArea initValue={nameUser} modificator="columns-page__name" setValue={setNameUser} />
       <div className="columns-page__wrapper">
         {columns.map((item, id) => (
-          <Column name={item} idColumn={id} key={id} cards={cards} addCard={setCards} setNameColumn={(newName: string): void => removeColumn(newName, id)} />
+          <Column
+            name={item}
+            id={id}
+            key={id}
+            cards={cards}
+            addCard={setCards}
+            setNameColumn={(newName: string): void => removeColumn(newName, id)}
+          />
         ))}
       </div>
     </div>

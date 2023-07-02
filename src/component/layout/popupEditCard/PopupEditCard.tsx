@@ -3,11 +3,8 @@ import "./popupEditCard.sass";
 
 import { FC } from "react";
 
-interface IPopupEditCard {
-  show?: boolean
-}
 
-const PopupEditCard: FC<IPopupEditCard> = ({ show }) => {
+const PopupEditCard: FC = () => {
   return (
     <div className="popupEditCard">
       <div className="popupEditCard__item">Удалить</div>
