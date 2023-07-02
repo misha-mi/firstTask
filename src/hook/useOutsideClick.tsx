@@ -9,14 +9,15 @@ const useOutsideClick = (elementRef: MutableRefObject<HTMLElement | null>, func:
     if (!elementRef.current?.contains(e.target as Node) && start && !block) {
       func();
     }
-    setStart(true);
   }
 
+  setTimeout(() => setStart(true));
+
   useEffect(() => {
-    document.addEventListener("click", handleClick);
+    document.addEventListener("mousedown", handleClick);
 
     return () => {
-      document.removeEventListener("click", handleClick);
+      document.removeEventListener("mousedown", handleClick);
     };
   })
 }

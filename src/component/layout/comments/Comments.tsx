@@ -35,10 +35,10 @@ const Comments: FC<IComments> = ({ setBlock }) => {
 
       </div>
       <div className="comments__wrapper">
-        <Comment />
-        <Comment />
-        <Comment />
-        <Comment />
+        <Comment setBlock={setBlock} />
+        <Comment setBlock={setBlock} />
+        <Comment setBlock={setBlock} />
+        <Comment setBlock={setBlock} />
       </div>
     </>
   )

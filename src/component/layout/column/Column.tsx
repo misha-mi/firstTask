@@ -57,16 +57,13 @@ const Column: FC<IColumn> = ({ name, id, cards, addCard, setNameColumn }) => {
         }
 
         {
-          addBool ? <AddItem setValue={setNameNewCard} addNewItem={addNewCard} setAddBool={setAddBool} /> : null
+          !addBool ? (
+            <div className="column__add">
+              <Button value="+ Добавить карточку" onClick={() => setAddBool(true)} />
+            </div>
+          ) : <AddItem setValue={setNameNewCard} addNewItem={addNewCard} setAddBool={setAddBool} />
         }
       </div>
-
-      {
-        !addBool ? (
-          <Button value="+ Добавить карточку" onClick={() => setAddBool(true)} />
-        ) : null
-      }
-
     </div>
   )
 }

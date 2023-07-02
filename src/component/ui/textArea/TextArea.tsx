@@ -29,6 +29,16 @@ const TextArea: FC<ITextArea> = ({ initValue, modificator = "", mod = true, focu
     }
   }
 
+  const blur = () => {
+    if (!valueInput && focus) {
+      textAreaRef.current?.focus();
+    } else if (!valueInput) {
+      textAreaRef.current?.classList.add("textArea__empty")
+    } else {
+      textAreaRef.current?.classList.remove("textArea__empty")
+    }
+  }
+
   useEffect(() => {
     if (focus) {
       setTimeout(() => textAreaRef.current?.focus());
@@ -42,7 +52,7 @@ const TextArea: FC<ITextArea> = ({ initValue, modificator = "", mod = true, focu
       value={valueInput}
       ref={textAreaRef}
       onInput={(e: FormEvent<HTMLTextAreaElement>) => inputTextArea((e.target as HTMLTextAreaElement).value)}
-      onBlur={(e) => !valueInput ? e.currentTarget.focus() : null}>
+      onBlur={blur}>
     </textarea>
   ) : <div className={"textArea__mod-false " + modificator}>{valueInput}</div>
 
