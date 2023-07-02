@@ -10,18 +10,19 @@ import Comments from "../../component/layout/comments/Comments";
 import { ContextPage } from "../../component/app/App";
 
 import useOutsideClick from "../../hook/useOutsideClick";
-import useClickKey from "../../service/useClickKey";
+import useClickKey from "../../hook/useClickKey";
 
-import { FC, useContext, useRef } from "react";
+import { FC, useContext, useRef, useState } from "react";
 
 const CardPage: FC = () => {
 
   const { setOpenPageID } = useContext(ContextPage);
+  const [block, setBlock] = useState(false);
 
   const pageRef = useRef(null);
 
-  useOutsideClick(pageRef, () => setOpenPageID("-1"));
-  useClickKey("Escape", () => setOpenPageID("-1"));
+  useOutsideClick(pageRef, () => setOpenPageID("-1"), block);
+  useClickKey("Escape", () => setOpenPageID("-1"), block);
 
   return (
     <div className="cardPage" ref={pageRef}>
@@ -43,7 +44,7 @@ const CardPage: FC = () => {
         <TextArea initValue={"dsfa"} />
       </div>
       <div className="cardPage__comments">
-        <Comments />
+        <Comments setBlock={setBlock} />
       </div>
     </div>
   )
