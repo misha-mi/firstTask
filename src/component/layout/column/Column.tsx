@@ -3,7 +3,8 @@ import "./column.sass";
 
 import TextArea from "../../ui/textArea/TextArea";
 import Card from "../card/Card";
-import AddCard from "../addCard/AddCard";
+import AddItem from "../addItem/AddItem";
+import Button from "../../ui/button/Button";
 
 import { FC, useState } from "react";
 
@@ -56,18 +57,13 @@ const Column: FC<IColumn> = ({ name, id, cards, addCard, setNameColumn }) => {
         }
 
         {
-          addBool ? <AddCard setNameNewCard={setNameNewCard} addNewCard={addNewCard} setAddBool={setAddBool} /> : null
+          addBool ? <AddItem setValue={setNameNewCard} addNewItem={addNewCard} setAddBool={setAddBool} /> : null
         }
       </div>
 
       {
         !addBool ? (
-          <button
-            className={"column__add"}
-            onClick={() => setAddBool(true)}
-          >
-            + Добавить карточку
-          </button>
+          <Button value="+ Добавить карточку" onClick={() => setAddBool(true)} />
         ) : null
       }
 
