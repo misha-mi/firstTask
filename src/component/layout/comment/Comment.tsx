@@ -2,26 +2,58 @@
 import "./comment.sass";
 
 import Title from "../../ui/title/Title";
-import TextArea from "../../ui/textArea/TextArea";
+import AddItem from "../addItem/AddItem";
 
-import { useState } from "react";
+import { FC, useState } from "react";
 
-const Comment = () => {
+import { TComment } from "../../../@types/localsStorageTypes";
 
-  const [mod, setMod] = useState<boolean>(true); // режимы: статический, модификация
-  // замена на кстом useToggle
+interface iComment {
+  setBlock: (block: boolean) => void
+  dataComment: TComment,
+  onDelete: () => void,
+  onModificate: (newComment: string) => void
+}
+
+const Comment: FC<iComment> = ({ setBlock, dataComment, onDelete, onModificate }) => {
+
+  const [mod, setMod] = useState<boolean>(false);
+  const [commentText, setCommentText] = useState<string>(dataComment.comment);
+
+  const toggleChangeMod = (bool: boolean, save?: boolean): void => {
+
+    setBlock(true);
+    setMod(bool);
+
+    if (!bool) {
+      setTimeout(() => setBlock(bool))
+      save && commentText ? onModificate(commentText) : setCommentText(dataComment.comment);
+    }
+  }
+
+  const deleteComment = () => {
+    setBlock(true);
+    onDelete();
+    setTimeout(() => setBlock(false));
+  }
+
   return (
     <div className="comment">
-      <Title title="Миша" />
-      <TextArea initValue="Комментарий" mod={mod} />
-      <div className="comment__control">
-        <button className="comment__modificate">
-          {mod ? "Сохранить" : "Изменить"}
-        </button>
-        <button className="comment__modificate">
-          {mod ? "Отмена" : "Удалить"}
-        </button>
-      </div>
+      <Title title={dataComment.author} />
+      {mod ? (
+        <AddItem
+          value={commentText}
+          setValue={(value) => setCommentText(value)}
+          addNewItem={() => toggleChangeMod(false, true)}
+          onClose={() => toggleChangeMod(false)}
+        />
+      ) : (
+        <>
+          <div>{commentText}</div>
+          <button onMouseDown={() => toggleChangeMod(true)}>Изменить</button>
+          <button onMouseDown={deleteComment}>Удалить</button>
+        </>
+      )}
     </div>
   )
 }

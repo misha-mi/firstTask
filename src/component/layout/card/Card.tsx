@@ -3,41 +3,61 @@ import "./card.sass";
 import comment from "../../../assets/comment.png";
 import edit from "../../../assets/edit.png";
 
-import PopupEditCard from "../popupEditCard/PopupEditCard";
+
 import SmallButton from "../../ui/smallButton/SmallButton";
+import TextArea from "../../ui/textArea/TextArea";
 
-import { FC, useRef, useState } from "react";
+import { ContextPage } from "../../app/App";
 
-const Card: FC = () => {
+import { FC, useRef, useContext } from "react";
 
-  const [showPopupEditCard, setShowPopupEditCard] = useState<boolean>(false);
+interface ICard {
+  name: string;
+  countComments: number
+  idCard: string,
+  mod?: boolean
+  setName?: (name: string) => void
+}
 
+const Card: FC<ICard> = ({ name, countComments, idCard, mod = false, setName }) => {
   const cardRef = useRef<HTMLDivElement>(null);
 
+  const { setOpenPageID } = useContext(ContextPage);
+
+
   return (
-    <div className="card">
+    <div className="card" onClick={() => name ? setOpenPageID(idCard) : null}>
+
       <div
         className="card__wrapper"
         ref={cardRef}
         onMouseEnter={() => cardRef.current?.classList.add("card__active")}
-        onMouseLeave={() => cardRef.current?.classList.remove("card__active")}>
+        onMouseLeave={() => cardRef.current?.classList.remove("card__active")}
+      >
 
-        <div className="card__title">Карточка 1</div>
+        <TextArea
+          value={name}
+          modificator="card__title"
+          mod={mod}
+          focus={mod ? true : false}
+          setValue={setName}
+        />
 
-        <div className="card__edit">
-          <SmallButton png={edit} />
-        </div>
+        {
+          !mod ? (
+            <>
+              <div className="card__edit">
+                <SmallButton png={edit} />
+              </div>
 
+              <div className="card__comment">
+                <img src={comment} alt="comment" />
+                <span>{countComments}</span>
+              </div>
+            </>
+          ) : null
+        }
 
-        <div className="card__comment">
-          <img src={comment} alt="comment" />
-          <span>1</span>
-        </div>
-
-      </div>
-
-      <div className="card__popup-edit">
-        <PopupEditCard />
       </div>
     </div>
   )

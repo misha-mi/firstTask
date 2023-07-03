@@ -1,43 +1,51 @@
 
 import "./app.sass";
 
-import PopupGreeting from "../layout//popupGreeting/PopupGreeting";
+import PopupGreeting from "../../pages/popupGreeting/PopupGreeting";
 import ColumnsPage from "../../pages/columnsPage/ColumnsPage";
-import CardPage from "../../pages/cardPage/CardPage";
+import { useLocalStorageName } from "../../service/useLocalStorage";
 
-import { useState, ReactElement } from "react";
+import { useState, ReactElement, createContext } from "react";
 
 enum Page {
   greeting,
   columns,
-  card
 }
+
+interface IContext {
+  openPageID: string,
+  setOpenPageID: (c: string) => void
+}
+
+export const ContextPage = createContext<IContext>({
+  openPageID: "-1",
+  setOpenPageID: () => { },
+})
 
 function App() {
 
-  const [page, setPage] = useState<Page>(Page.card); // стайте определяющий, какя страница открыта
+  const [name] = useLocalStorageName("name");
+
+  const [page, setPage] = useState<Page>((name ? Page.columns : Page.greeting));
+  const [openPageID, setOpenPageID] = useState<string>("-1");
 
   const acceptGreeting = () => {
     setPage(Page.columns);
   }
 
-  const openCard = () => {
-    setPage(Page.columns);
-  }
-
   let showPage: ReactElement = <PopupGreeting acceptGreeting={acceptGreeting} />;
+
   switch (page) {
     case 1:
       showPage = <ColumnsPage />
-      break;
-    case 2:
-      showPage = <CardPage />
       break;
   }
 
   return (
     <div className="app">
-      {showPage}
+      <ContextPage.Provider value={{ openPageID, setOpenPageID }}>
+        {showPage}
+      </ContextPage.Provider>
     </div>
   );
 }
