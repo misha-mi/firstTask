@@ -5,11 +5,12 @@ import { FC } from "react";
 
 interface ISmallButton {
   png: string
+  onClick?: () => void
 }
 
-const SmallButton: FC<ISmallButton> = ({ png }) => {
+const SmallButton: FC<ISmallButton> = ({ png, onClick }) => {
   return (
-    <div className="smallButton">
+    <div className="smallButton" onClick={onClick}>
       <img src={png} alt="edit" />
     </div>
   )

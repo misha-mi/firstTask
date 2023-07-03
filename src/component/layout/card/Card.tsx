@@ -20,10 +20,10 @@ interface ICard {
 }
 
 const Card: FC<ICard> = ({ name, countComments, idCard, mod = false, setName }) => {
-
   const cardRef = useRef<HTMLDivElement>(null);
 
   const { setOpenPageID } = useContext(ContextPage);
+
 
   return (
     <div className="card" onClick={() => name ? setOpenPageID(idCard) : null}>
@@ -36,7 +36,7 @@ const Card: FC<ICard> = ({ name, countComments, idCard, mod = false, setName }) 
       >
 
         <TextArea
-          initValue={name}
+          value={name}
           modificator="card__title"
           mod={mod}
           focus={mod ? true : false}

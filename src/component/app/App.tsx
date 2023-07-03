@@ -1,9 +1,9 @@
 
 import "./app.sass";
 
-import PopupGreeting from "../layout//popupGreeting/PopupGreeting";
+import PopupGreeting from "../../pages/popupGreeting/PopupGreeting";
 import ColumnsPage from "../../pages/columnsPage/ColumnsPage";
-import CardPage from "../../pages/cardPage/CardPage";
+import { useLocalStorageName } from "../../service/useLocalStorage";
 
 import { useState, ReactElement, createContext } from "react";
 
@@ -24,8 +24,9 @@ export const ContextPage = createContext<IContext>({
 
 function App() {
 
-  const [page, setPage] = useState<Page>(Page.columns); // state определяющий, какя страница открыта
+  const [name] = useLocalStorageName("name");
 
+  const [page, setPage] = useState<Page>((name ? Page.columns : Page.greeting));
   const [openPageID, setOpenPageID] = useState<string>("-1");
 
   const acceptGreeting = () => {
@@ -33,6 +34,7 @@ function App() {
   }
 
   let showPage: ReactElement = <PopupGreeting acceptGreeting={acceptGreeting} />;
+
   switch (page) {
     case 1:
       showPage = <ColumnsPage />
@@ -43,13 +45,6 @@ function App() {
     <div className="app">
       <ContextPage.Provider value={{ openPageID, setOpenPageID }}>
         {showPage}
-        {
-          openPageID !== "-1" ? (
-            <div className="app__card">
-              <CardPage />
-            </div>
-          ) : null
-        }
       </ContextPage.Provider>
     </div>
   );

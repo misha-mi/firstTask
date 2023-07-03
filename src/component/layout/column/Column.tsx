@@ -8,30 +8,33 @@ import Button from "../../ui/button/Button";
 
 import { FC, useState } from "react";
 
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from 'uuid'; // для создания уникальных id
+
+import { TCard } from "../../../@types/localsStorageTypes";
 
 interface IColumn {
   name: string
   id: number,
-  cards: {
-    name: string,
-    countComments: number,
-    idColumn: number,
-    idCard: string
-  }[],
-  addCard: ([]) => void
+  cards: TCard[],
+  nameAutrhor: string
+  addCard: (arr: TCard) => void
   setNameColumn: (newName: string) => void
 }
 
-const Column: FC<IColumn> = ({ name, id, cards, addCard, setNameColumn }) => {
+const Column: FC<IColumn> = ({ name, id, cards, nameAutrhor, addCard, setNameColumn }) => {
 
-  const [addBool, setAddBool] = useState<boolean>(false);
+  const [addBool, setAddBool] = useState<boolean>(false); // скрыть/показать окно добваления карточки
   const [nameNewCard, setNameNewCard] = useState<string>("");
 
-  const addNewCard = () => {
+  const onClose = () => {
+    setAddBool(false);
+    setNameNewCard("");
+  }
+
+  const addNewCard = () => { //запись карточки в localStorage
     if (nameNewCard) {
-      addCard([...cards, { name: nameNewCard, countComments: 0, idColumn: id, idCard: uuidv4() }]);
-      setAddBool(false);
+      addCard({ name: nameNewCard, countComments: 0, idColumn: id, idCard: uuidv4(), description: "", author: nameAutrhor });
+      onClose();
     }
   }
 
@@ -39,7 +42,11 @@ const Column: FC<IColumn> = ({ name, id, cards, addCard, setNameColumn }) => {
     <div className="column">
 
       <div className="column__header">
-        <TextArea initValue={name} modificator="title" setValue={setNameColumn} />
+        <TextArea
+          value={name}
+          modificator="title"
+          setValue={setNameColumn}
+        />
       </div>
 
       <div className="column__cards">
@@ -59,9 +66,19 @@ const Column: FC<IColumn> = ({ name, id, cards, addCard, setNameColumn }) => {
         {
           !addBool ? (
             <div className="column__add">
-              <Button value="+ Добавить карточку" onClick={() => setAddBool(true)} />
+              <Button
+                value="+ Добавить карточку"
+                onClick={() => setAddBool(true)}
+              />
             </div>
-          ) : <AddItem setValue={setNameNewCard} addNewItem={addNewCard} setAddBool={setAddBool} />
+          ) : (
+            <AddItem
+              value={nameNewCard}
+              setValue={setNameNewCard}
+              addNewItem={addNewCard}
+              onClose={onClose}
+            />
+          )
         }
       </div>
     </div>

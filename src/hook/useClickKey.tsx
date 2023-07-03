@@ -5,7 +5,7 @@ const useClickKey = (key: string, func: () => void, block?: boolean) => {
 
   useEffect(() => {
 
-    const clickKey = (e: any) => {
+    const clickKey = (e: KeyboardEvent) => {
       if (e.key === key && !block) {
         func();
       }

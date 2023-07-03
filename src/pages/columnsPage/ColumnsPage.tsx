@@ -3,28 +3,40 @@ import "./columnsPage.sass";
 
 import Column from "../../component/layout/column/Column";
 import TextArea from "../../component/ui/textArea/TextArea";
-import useLocalStorage from "../../service/useLocalStorage";
+import CardPage from "../cardPage/CardPage";
 
-import { FC } from "react";
+import { FC, useContext, useEffect } from "react";
+import { useLocalStorageCard, useLocalStorageName, useLocalStorageColumn, useLocalStorageComment } from "../../service/useLocalStorage";
+import { ContextPage } from "../../component/app/App";
+
+
 
 const ColumnsPage: FC = () => {
 
-  const [nameUser, setNameUser] = useLocalStorage("name", "");
-  const [columns, setColumns] = useLocalStorage("columns", ["", ""], [
+  const { openPageID, setOpenPageID } = useContext(ContextPage);
+  const [nameUser, setNameUser] = useLocalStorageName("name");
+  const [columns, setNewName] = useLocalStorageColumn("columns", [
     "TODO",
     "In Progress",
     "Testing",
     "Done"
   ]);
-  const [cards, setCards] = useLocalStorage("cards", [{ name: "", countComments: 0, idColumn: 0, idCard: "" }]);
+  const [cards, addValue, deleteCard, modificateCard] = useLocalStorageCard("cards");
+  const [comments] = useLocalStorageComment("comment");
 
-  const removeColumn = (newName: string, id: number): void => {
-    setColumns([...columns.slice(0, id), newName, ...columns.slice(id + 1)]);
-  }
+  const openCard = (cards.find(item => item.idCard === openPageID));
+
+  useEffect(() => {
+    console.log(comments, cards)
+    cards.forEach(item => {
+      const count = comments.filter(comment => item.idCard === comment.idCard).length;
+      modificateCard(item.idCard, "countComments", count);
+    })
+  }, [])
 
   return (
     <div className="columns-page">
-      <TextArea initValue={nameUser} modificator="columns-page__name" setValue={setNameUser} />
+      <TextArea value={nameUser} modificator="columns-page__name" setValue={setNameUser} />
       <div className="columns-page__wrapper">
         {columns.map((item, id) => (
           <Column
@@ -32,11 +44,25 @@ const ColumnsPage: FC = () => {
             id={id}
             key={id}
             cards={cards}
-            addCard={setCards}
-            setNameColumn={(newName: string): void => removeColumn(newName, id)}
+            nameAutrhor={nameUser}
+            addCard={addValue}
+            setNameColumn={(newName: string): void => setNewName(id, newName)}
           />
         ))}
       </div>
+      {
+        openPageID !== "-1" ? (
+          <div className="columns-page__cardPage">
+            <CardPage
+              setOpenPageID={setOpenPageID}
+              deleteCard={() => deleteCard(openPageID)}
+              card={openCard}
+              columns={columns}
+              modificate={(key: string, newValue: string | number) => modificateCard(openPageID, key, newValue)}
+            />
+          </div>
+        ) : null
+      }
     </div>
   )
 }

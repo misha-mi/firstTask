@@ -1,9 +1,9 @@
 
 import "./popupGreeting.sass";
 
-import { FC, useState, FormEvent } from "react";
+import { FC, FormEvent } from "react";
 
-import useLocalStorage from "../../../service/useLocalStorage";
+import { useLocalStorageName } from "../../service/useLocalStorage";
 
 interface IPopupGreeting {
   acceptGreeting: () => void;
@@ -11,10 +11,12 @@ interface IPopupGreeting {
 
 const PopupGreeting: FC<IPopupGreeting> = ({ acceptGreeting }) => {
 
-  const [nameUser, setNameUser] = useLocalStorage("name", "");
+  const [nameUser, setNameUser] = useLocalStorageName("name");
 
   const accept = () => {
-    acceptGreeting();
+    if (nameUser !== "") {
+      acceptGreeting();
+    }
   }
 
   return (

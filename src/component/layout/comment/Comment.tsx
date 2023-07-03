@@ -2,59 +2,58 @@
 import "./comment.sass";
 
 import Title from "../../ui/title/Title";
-import TextArea from "../../ui/textArea/TextArea";
+import AddItem from "../addItem/AddItem";
 
-import useClickKey from "../../../hook/useClickKey";
-import useOutsideClick from "../../../hook/useOutsideClick";
+import { FC, useState } from "react";
 
-import { FC, useState, useRef } from "react";
+import { TComment } from "../../../@types/localsStorageTypes";
 
 interface iComment {
   setBlock: (block: boolean) => void
+  dataComment: TComment,
+  onDelete: () => void,
+  onModificate: (newComment: string) => void
 }
 
-const Comment: FC<iComment> = ({ setBlock }) => {
+const Comment: FC<iComment> = ({ setBlock, dataComment, onDelete, onModificate }) => {
 
   const [mod, setMod] = useState<boolean>(false);
+  const [commentText, setCommentText] = useState<string>(dataComment.comment);
 
-  const refComment = useRef(null);
-  useOutsideClick(refComment, () => toggleChangeMod(false));
-  useClickKey("Escape", () => toggleChangeMod(false));
+  const toggleChangeMod = (bool: boolean, save?: boolean): void => {
 
-  const toggleChangeMod = (bool: boolean): void => {
+    setBlock(true);
     setMod(bool);
-    bool ? setBlock(bool) : setTimeout(() => setBlock(bool))
+
+    if (!bool) {
+      setTimeout(() => setBlock(bool))
+      save && commentText ? onModificate(commentText) : setCommentText(dataComment.comment);
+    }
+  }
+
+  const deleteComment = () => {
+    setBlock(true);
+    onDelete();
+    setTimeout(() => setBlock(false));
   }
 
   return (
-    <div className="comment" ref={refComment}>
-      <Title title="Миша" />
-      <div ref={refComment}>
-        <TextArea initValue="Комментарий" mod={mod} focus={mod} />
-      </div>
-      <div className="comment__control">
-        {
-          mod ? (
-            <>
-              <button className="comment__modificate">
-                Сохранить
-              </button>
-              <button className="comment__modificate" onClick={() => toggleChangeMod(false)}>
-                Отмена
-              </button>
-            </>
-          ) : (
-            <>
-              <button className="comment__modificate" onClick={() => toggleChangeMod(true)}>
-                Изменить
-              </button>
-              <button className="comment__modificate">
-                Удалить
-              </button>
-            </>
-          )
-        }
-      </div>
+    <div className="comment">
+      <Title title={dataComment.author} />
+      {mod ? (
+        <AddItem
+          value={commentText}
+          setValue={(value) => setCommentText(value)}
+          addNewItem={() => toggleChangeMod(false, true)}
+          onClose={() => toggleChangeMod(false)}
+        />
+      ) : (
+        <>
+          <div>{commentText}</div>
+          <button onMouseDown={() => toggleChangeMod(true)}>Изменить</button>
+          <button onMouseDown={deleteComment}>Удалить</button>
+        </>
+      )}
     </div>
   )
 }
