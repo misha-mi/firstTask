@@ -1,19 +1,19 @@
 
 import { useEffect } from "react";
 
-const useClickKey = (key: string, func: () => void, block?: boolean) => {
+const useClickKey = (key: string, func: () => void, blockFunc?: boolean) => {
 
   useEffect(() => {
 
-    const clickKey = (e: KeyboardEvent) => {
-      if (e.key === key && !block) {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === key && !blockFunc) {
         func();
       }
     }
 
-    document.addEventListener("keydown", clickKey);
+    document.addEventListener("keydown", onKeyDown);
 
-    return () => document.removeEventListener("keydown", clickKey);
+    return () => document.removeEventListener("keydown", onKeyDown);
   })
 
 }

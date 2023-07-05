@@ -8,32 +8,32 @@ import Button from "../../ui/button/Button";
 
 import { FC, useState } from "react";
 
-import { v4 as uuidv4 } from 'uuid'; // для создания уникальных id
+import { v4 as uuidv4 } from 'uuid';
 
 import { TCard } from "../../../@types/localsStorageTypes";
 
 interface IColumn {
-  name: string
-  id: number,
-  cards: TCard[],
-  nameAutrhor: string
+  columnName: string
+  columnIDForFilter: number,
+  cardsData: TCard[],
+  authorName: string
   addCard: (arr: TCard) => void
-  setNameColumn: (newName: string) => void
+  setColumnName: (newName: string) => void
 }
 
-const Column: FC<IColumn> = ({ name, id, cards, nameAutrhor, addCard, setNameColumn }) => {
+const Column: FC<IColumn> = ({ columnName, columnIDForFilter, cardsData, authorName, addCard, setColumnName }) => {
 
-  const [addBool, setAddBool] = useState<boolean>(false); // скрыть/показать окно добваления карточки
-  const [nameNewCard, setNameNewCard] = useState<string>("");
+  const [addingMode, setAddingMode] = useState<boolean>(false);
+  const [newCardName, setNewCardName] = useState<string>("");
 
   const onClose = () => {
-    setAddBool(false);
-    setNameNewCard("");
+    setAddingMode(false);
+    setNewCardName("");
   }
 
-  const addNewCard = () => { //запись карточки в localStorage
-    if (nameNewCard) {
-      addCard({ name: nameNewCard, countComments: 0, idColumn: id, idCard: uuidv4(), description: "", author: nameAutrhor });
+  const onAddNewCard = () => {
+    if (newCardName) {
+      addCard({ name: newCardName, countComments: 0, columnID: columnIDForFilter, cardID: uuidv4(), description: "", author: authorName });
       onClose();
     }
   }
@@ -43,39 +43,39 @@ const Column: FC<IColumn> = ({ name, id, cards, nameAutrhor, addCard, setNameCol
 
       <div className="column__header">
         <TextArea
-          value={name}
-          modificator="title"
-          setValue={setNameColumn}
+          value={columnName}
+          CSSModifier="title"
+          setValue={setColumnName}
         />
       </div>
 
       <div className="column__cards">
         {
-          cards.map(({ name, countComments, idColumn, idCard }) => (
-            id === idColumn ? (
+          cardsData.map(({ name, countComments, columnID, cardID }) => (
+            columnID === columnIDForFilter ? (
               <Card
-                name={name}
-                countComments={countComments}
-                key={idCard}
-                idCard={idCard}
+                cardName={name}
+                commentsCount={countComments}
+                key={cardID}
+                cardID={cardID}
               />
             ) : null
           ))
         }
 
         {
-          !addBool ? (
+          !addingMode ? (
             <div className="column__add">
               <Button
-                value="+ Добавить карточку"
-                onClick={() => setAddBool(true)}
+                buttonText="+ Добавить карточку"
+                onClick={() => setAddingMode(true)}
               />
             </div>
           ) : (
             <AddItem
-              value={nameNewCard}
-              setValue={setNameNewCard}
-              addNewItem={addNewCard}
+              value={newCardName}
+              setValue={setNewCardName}
+              onAdd={onAddNewCard}
               onClose={onClose}
             />
           )

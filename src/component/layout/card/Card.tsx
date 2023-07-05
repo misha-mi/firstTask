@@ -3,7 +3,6 @@ import "./card.sass";
 import comment from "../../../assets/comment.png";
 import edit from "../../../assets/edit.png";
 
-
 import SmallButton from "../../ui/smallButton/SmallButton";
 import TextArea from "../../ui/textArea/TextArea";
 
@@ -12,21 +11,19 @@ import { ContextPage } from "../../app/App";
 import { FC, useRef, useContext } from "react";
 
 interface ICard {
-  name: string;
-  countComments: number
-  idCard: string,
-  mod?: boolean
-  setName?: (name: string) => void
+  cardName: string;
+  commentsCount: number
+  cardID: string
 }
 
-const Card: FC<ICard> = ({ name, countComments, idCard, mod = false, setName }) => {
+const Card: FC<ICard> = ({ cardName, commentsCount, cardID }) => {
   const cardRef = useRef<HTMLDivElement>(null);
 
-  const { setOpenPageID } = useContext(ContextPage);
+  const { setOpenCardID } = useContext(ContextPage);
 
 
   return (
-    <div className="card" onClick={() => name ? setOpenPageID(idCard) : null}>
+    <div className="card" onClick={() => cardName ? setOpenCardID(cardID) : null}>
 
       <div
         className="card__wrapper"
@@ -36,27 +33,19 @@ const Card: FC<ICard> = ({ name, countComments, idCard, mod = false, setName }) 
       >
 
         <TextArea
-          value={name}
-          modificator="card__title"
-          mod={mod}
-          focus={mod ? true : false}
-          setValue={setName}
+          value={cardName}
+          CSSModifier="card__title"
+          modificationMode={false}
         />
 
-        {
-          !mod ? (
-            <>
-              <div className="card__edit">
-                <SmallButton png={edit} />
-              </div>
+        <div className="card__edit">
+          <SmallButton imgPng={edit} />
+        </div>
 
-              <div className="card__comment">
-                <img src={comment} alt="comment" />
-                <span>{countComments}</span>
-              </div>
-            </>
-          ) : null
-        }
+        <div className="card__comment">
+          <img src={comment} alt="comment" />
+          <span>{commentsCount}</span>
+        </div>
 
       </div>
     </div>

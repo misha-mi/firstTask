@@ -9,49 +9,51 @@ import { FC, useState } from "react";
 import { TComment } from "../../../@types/localsStorageTypes";
 
 interface iComment {
-  setBlock: (block: boolean) => void
-  dataComment: TComment,
-  onDelete: () => void,
-  onModificate: (newComment: string) => void
+  setBlockESC: (block: boolean) => void
+  commentData: TComment,
+  onDeleteComment: () => void,
+  onModifyComment: (newComment: string) => void
 }
 
-const Comment: FC<iComment> = ({ setBlock, dataComment, onDelete, onModificate }) => {
+const Comment: FC<iComment> = ({ setBlockESC, commentData, onDeleteComment, onModifyComment }) => {
 
-  const [mod, setMod] = useState<boolean>(false);
-  const [commentText, setCommentText] = useState<string>(dataComment.comment);
+  const [modificationMode, setModificationMode] = useState<boolean>(false);
+  const [commentText, setCommentText] = useState<string>(commentData.comment);
 
-  const toggleChangeMod = (bool: boolean, save?: boolean): void => {
+  const toggleChangeMod = (modificationMode: boolean, save?: boolean): void => {
 
-    setBlock(true);
-    setMod(bool);
+    setBlockESC(true);
+    setModificationMode(modificationMode);
 
-    if (!bool) {
-      setTimeout(() => setBlock(bool))
-      save && commentText ? onModificate(commentText) : setCommentText(dataComment.comment);
+    if (!modificationMode) {
+      setTimeout(() => setBlockESC(modificationMode))
+      save && commentText ? onModifyComment(commentText) : setCommentText(commentData.comment);
     }
   }
 
-  const deleteComment = () => {
-    setBlock(true);
-    onDelete();
-    setTimeout(() => setBlock(false));
+  const onDelete = () => {
+    setBlockESC(true);
+    onDeleteComment();
+    setTimeout(() => setBlockESC(false));
   }
 
   return (
     <div className="comment">
-      <Title title={dataComment.author} />
-      {mod ? (
-        <AddItem
-          value={commentText}
-          setValue={(value) => setCommentText(value)}
-          addNewItem={() => toggleChangeMod(false, true)}
-          onClose={() => toggleChangeMod(false)}
-        />
+      <Title titleText={commentData.author} />
+      {modificationMode ? (
+        <div className="comment__text">
+          <AddItem
+            value={commentText}
+            setValue={(value) => setCommentText(value)}
+            onAdd={() => toggleChangeMod(false, true)}
+            onClose={() => toggleChangeMod(false)}
+          />
+        </div>
       ) : (
         <>
-          <div>{commentText}</div>
+          <div className="comment__text">{commentText}</div>
           <button onMouseDown={() => toggleChangeMod(true)}>Изменить</button>
-          <button onMouseDown={deleteComment}>Удалить</button>
+          <button onMouseDown={onDelete}>Удалить</button>
         </>
       )}
     </div>

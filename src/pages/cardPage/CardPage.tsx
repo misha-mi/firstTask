@@ -17,63 +17,63 @@ import { TCard } from "../../@types/localsStorageTypes";
 
 interface ICardPage {
   setOpenPageID: (pageId: string) => void,
-  deleteCard: () => void,
-  card: TCard | undefined,
+  onDeleteCard: () => void,
+  cardData: TCard | undefined,
   columns: string[],
-  modificate: (key: string, newValue: string | number) => void
+  modifyCardValue: (key: string, newValue: string | number) => void
 }
 
-const CardPage: FC<ICardPage> = ({ setOpenPageID, deleteCard, card, columns, modificate }) => {
+const CardPage: FC<ICardPage> = ({ setOpenPageID, onDeleteCard, cardData, columns, modifyCardValue }) => {
 
-  const [block, setBlock] = useState(false);
+  const [blockESC, setBlockESC] = useState(false);
 
   const pageRef = useRef(null);
 
 
-  useOutsideClick(pageRef, () => setOpenPageID("-1"), block);
-  useClickKey("Escape", () => setOpenPageID("-1"), block);
+  useOutsideClick(pageRef, () => setOpenPageID("-1"), blockESC);
+  useClickKey("Escape", () => setOpenPageID("-1"), blockESC);
 
   const onDelete = () => {
-    deleteCard()
+    onDeleteCard()
     setOpenPageID("-1");
   }
 
-  const nameColumn = card?.idColumn !== undefined ? columns[card.idColumn] : "!";
+  const columnName = cardData?.columnID !== undefined ? columns[cardData.columnID] : "!";
 
   return (
-    <div className="cardPage" ref={pageRef}>
-      <div className="cardPage__header">
+    <div className="card-page" ref={pageRef}>
+      <div className="card-page__header">
         <TextArea
-          value={card?.name || ""}
-          modificator="title"
-          setValue={(value) => modificate("name", value)}
+          value={cardData?.name || ""}
+          CSSModifier="title"
+          setValue={(value) => modifyCardValue("name", value)}
         />
         <div>
           <SmallButton
-            png={trash}
+            imgPng={trash}
             onClick={onDelete}
           />
         </div>
         <div onClick={() => setOpenPageID("-1")}>
-          <SmallButton png={close} />
+          <SmallButton imgPng={close} />
         </div>
       </div>
-      <p className="cardPage__info">
-        <span className="cardPage__column-name">Колонка: {nameColumn}</span>
-        <span className="cardPage__author">Автор: {card?.author} </span>
+      <p className="card-page__info">
+        <span className="card-page__column-name">Колонка: {columnName}</span>
+        <span className="card-page__author">Автор: {cardData?.author} </span>
       </p>
-      <div className="cardPage__description">
-        <Title title="Описание" />
+      <div className="card-page__description">
+        <Title titleText="Описание" />
         <TextArea
-          value={card?.description || ""}
-          setValue={(value) => modificate("description", value)}
+          value={cardData?.description || ""}
+          setValue={(value) => modifyCardValue("description", value)}
         />
       </div>
-      <div className="cardPage__comments">
+      <div className="card-page__comments">
         <Comments
-          setBlock={setBlock}
-          idCard={card?.idCard || ""}
-          modificateCountCard={modificate}
+          setBlockESC={setBlockESC}
+          idCard={cardData?.cardID || ""}
+          setCountComments={modifyCardValue}
         />
       </div>
     </div>

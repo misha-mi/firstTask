@@ -4,14 +4,14 @@ import "./smallButton.sass";
 import { FC } from "react";
 
 interface ISmallButton {
-  png: string
+  imgPng: string
   onClick?: () => void
 }
 
-const SmallButton: FC<ISmallButton> = ({ png, onClick }) => {
+const SmallButton: FC<ISmallButton> = ({ imgPng, onClick }) => {
   return (
-    <div className="smallButton" onClick={onClick}>
-      <img src={png} alt="edit" />
+    <div className="small-button" onClick={onClick}>
+      <img src={imgPng} alt="edit" />
     </div>
   )
 }

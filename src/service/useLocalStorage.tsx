@@ -3,11 +3,6 @@ import { TCard, TComment } from "../@types/localsStorageTypes";
 
 import { useState, useEffect } from "react";
 
-// Я не смог докнца разобраться с типизацией useLocalStorage, в итоге создал
-// несколько хуков для каждого из типа данных Имя, Колонки, Карточки, карточки
-// Понимаю, что здесь дублируется код...
-// В дальнейшем постараюсь исправить
-
 
 function decode<T>(value: T) {
   return JSON.stringify(value);
@@ -17,28 +12,28 @@ function encode(value: string) {
   return JSON.parse(value);
 }
 
-export const useLocalStorageName = (key: string): [
+export const useLocalStorageName = (): [
   string,
   (name: string) => void
 ] => {
-  const [value, setValue] = useState<string>(encode(localStorage.getItem(key) || '""'));
+  const [value, setValue] = useState<string>(encode(localStorage.getItem("name") || '""'));
 
   useEffect(() => {
-    localStorage.setItem(key, decode(value))
+    localStorage.setItem("name", decode(value))
   }, [value])
 
   return [value, setValue];
 }
 
-export const useLocalStorageColumn = (key: string, defaultValue?: string[]): [
+export const useLocalStorageColumn = (defaultValue?: string[]): [
   string[],
   (id: number, newName: string) => void
 ] => {
 
-  const [value, setValue] = useState<string[]>(encode(localStorage.getItem(key) || '""') || defaultValue);
+  const [value, setValue] = useState<string[]>(encode(localStorage.getItem("columns") || '""') || defaultValue);
 
   useEffect(() => {
-    localStorage.setItem(key, decode(value))
+    localStorage.setItem("columns", decode(value))
   }, [value])
 
   const setNewName = (id: number, newName: string) => {
@@ -48,29 +43,29 @@ export const useLocalStorageColumn = (key: string, defaultValue?: string[]): [
   return [value, setNewName];
 }
 
-export const useLocalStorageCard = (key: string): [
+export const useLocalStorageCard = (): [
   TCard[],
   (arr: TCard) => void,
-  (idCard: string) => void,
-  (idCard: string, key: string, newValue: string | number) => void
+  (cardID: string) => void,
+  (cardID: string, key: string, newValue: string | number) => void
 ] => {
-  const [value, setValue] = useState<TCard[]>(encode(localStorage.getItem(key) || '""') || []);
+  const [value, setValue] = useState<TCard[]>(encode(localStorage.getItem("cards") || '""') || []);
 
   useEffect(() => {
-    localStorage.setItem(key, decode(value))
+    localStorage.setItem("cards", decode(value))
   }, [value])
 
-  const addValue = (newItem: TCard) => {
+  const addCard = (newItem: TCard) => {
     setValue([...value, newItem]);
   }
 
-  const deleteValue = (idCard: string) => {
-    setValue(value.filter(item => !(item.idCard === idCard)))
+  const deleteCard = (cardID: string) => {
+    setValue(value.filter(item => !(item.cardID === cardID)))
   }
 
-  const modificateValue = (idCard: string, key: string, newValue: string | number) => {
+  const modifyCard = (cardID: string, key: string, newValue: string | number) => {
     setValue(value.map(item => {
-      if (item.idCard === idCard) {
+      if (item.cardID === cardID) {
         switch (key) {
           case "name":
             return { ...item, name: String(newValue) }
@@ -84,39 +79,39 @@ export const useLocalStorageCard = (key: string): [
     }))
   }
 
-  return [value, addValue, deleteValue, modificateValue];
+  return [value, addCard, deleteCard, modifyCard];
 }
 
-export const useLocalStorageComment = (key: string): [
+export const useLocalStorageComment = (): [
   TComment[],
   (arr: TComment) => void,
   (idComment: string) => void,
   (idComment: string, newValue: string) => void
 ] => {
-  const [value, setValue] = useState<TComment[]>(encode(localStorage.getItem(key) || '""') || []);
+  const [value, setValue] = useState<TComment[]>(encode(localStorage.getItem("comments") || '""') || []);
 
   useEffect(() => {
-    localStorage.setItem(key, decode(value))
+    localStorage.setItem("comments", decode(value))
   }, [value])
 
   const addValue = (newItem: TComment) => {
     setValue([...value, newItem]);
   }
 
-  const deleteValue = (idComment: string) => {
-    setValue(value.filter(item => !(item.idComment === idComment)))
+  const deleteValue = (commentID: string) => {
+    setValue(value.filter(item => !(item.commentID === commentID)))
   }
 
-  const modificateComment = (idComment: string, newValue: string) => {
+  const modifyComment = (commentID: string, newValue: string) => {
     setValue(value.map(item => {
-      if (item.idComment === idComment) {
+      if (item.commentID === commentID) {
         return { ...item, comment: newValue }
       }
       return item;
     }))
   }
 
-  return [value, addValue, deleteValue, modificateComment];
+  return [value, addValue, deleteValue, modifyComment];
 }
 
 

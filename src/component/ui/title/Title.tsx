@@ -3,9 +3,9 @@ import "./title.sass";
 
 import { FC } from "react";
 
-const Title: FC<{ title: string }> = ({ title }) => {
+const Title: FC<{ titleText: string }> = ({ titleText }) => {
   return (
-    <div className="title">{title}</div>
+    <div className="title">{titleText}</div>
   )
 }
 

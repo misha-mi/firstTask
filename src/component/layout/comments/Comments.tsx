@@ -8,72 +8,72 @@ import AddItem from "../addItem/AddItem";
 
 import { useLocalStorageComment, useLocalStorageName } from "../../../service/useLocalStorage";
 
-import { v4 as uuidv4 } from 'uuid'; // для создания уникальных id
+import { v4 as uuidv4 } from 'uuid';
 
 import { FC, useState, useEffect } from "react";
 
 interface IComments {
-  setBlock: (block: boolean) => void, // блокирование закрытия при нажатии вне поля и нажатии клваиши ESC
+  setBlockESC: (block: boolean) => void,
   idCard: string,
-  modificateCountCard: (key: string, newValue: number) => void
+  setCountComments: (key: string, newValue: number) => void
 }
 
-const Comments: FC<IComments> = ({ setBlock, idCard, modificateCountCard }) => {
+const Comments: FC<IComments> = ({ setBlockESC, idCard, setCountComments }) => {
 
-  const [author] = useLocalStorageName("name");
+  const [author] = useLocalStorageName();
 
-  const [comments, addComment, deleteComment, modificateComment] = useLocalStorageComment("comment");
+  const [comments, onAddComment, onDeleteComment, onModifyComment] = useLocalStorageComment();
 
-  const [addBool, setAddBool] = useState(false);
-  const [textComment, setTextComment] = useState("");
+  const [addingMode, setAddingMode] = useState<boolean>(false);
+  const [commentText, setCommentText] = useState<string>("");
 
-  const showAddComment = (bool: boolean): void => { // переключение между режимами (модификация/статик)
-    setAddBool(bool);
-    bool ? setBlock(bool) : setTimeout(() => setBlock(bool))
-    setTextComment("");
+  const onAddingMode = (bool: boolean): void => {
+    setAddingMode(bool);
+    bool ? setBlockESC(bool) : setTimeout(() => setBlockESC(bool))
+    setCommentText("");
   }
 
   const onAdd = () => {
-    if (textComment) {
-      addComment({ author: author, comment: textComment, idCard: idCard, idComment: uuidv4() })
-      showAddComment(false);
+    if (commentText) {
+      onAddComment({ author: author, comment: commentText, cardID: idCard, commentID: uuidv4() })
+      onAddingMode(false);
     }
   }
 
   useEffect(() => {
-    const count = comments.filter(comment => idCard === comment.idCard).length;
-    modificateCountCard("countComments", count);
+    const count = comments.filter(comment => idCard === comment.cardID).length;
+    setCountComments("countComments", count);
   }, [comments])
 
   return (
     <>
-      <Title title="Комментарии" />
+      <Title titleText="Комментарии" />
       <div className="comments__add">
         {
-          !addBool ? (
+          !addingMode ? (
             <Button
-              value="+ Добавить комментарий"
-              onClick={() => showAddComment(true)}
+              buttonText="+ Добавить комментарий"
+              onClick={() => onAddingMode(true)}
             />
           ) : (
             <AddItem
-              value={textComment}
-              setValue={(value) => setTextComment(value)}
-              addNewItem={onAdd}
-              onClose={() => showAddComment(false)}
+              value={commentText}
+              setValue={(value) => setCommentText(value)}
+              onAdd={onAdd}
+              onClose={() => onAddingMode(false)}
             />
           )
         }
 
       </div>
       <div className="comments__wrapper">
-        {comments.map(item => item.idCard === idCard ? (
+        {comments.map(item => item.cardID === idCard ? (
           <Comment
-            setBlock={setBlock}
-            dataComment={item}
-            key={item.idComment}
-            onDelete={() => deleteComment(item.idComment)}
-            onModificate={(value) => modificateComment(item.idComment, value)}
+            setBlockESC={setBlockESC}
+            commentData={item}
+            key={item.commentID}
+            onDeleteComment={() => onDeleteComment(item.commentID)}
+            onModifyComment={(value) => onModifyComment(item.commentID, value)}
           />
         ) : null)}
       </div>

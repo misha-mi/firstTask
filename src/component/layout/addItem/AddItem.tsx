@@ -8,12 +8,12 @@ import { FC, useRef } from "react"
 
 interface IAddItem {
   value: string,
-  setValue: (name: string) => void, // ввод в state название item
-  addNewItem: () => void, // добавление item в localStorage
-  onClose: () => void // скрытие компонента добавления нового item
+  setValue: (name: string) => void,
+  onAdd: () => void,
+  onClose: () => void
 }
 
-const AddItem: FC<IAddItem> = ({ value, setValue, addNewItem, onClose }) => {
+const AddItem: FC<IAddItem> = ({ value, setValue, onAdd, onClose }) => {
 
   const ref = useRef(null);
 
@@ -23,8 +23,8 @@ const AddItem: FC<IAddItem> = ({ value, setValue, addNewItem, onClose }) => {
   return (
     <div ref={ref}>
       <TextArea value={value} setValue={setValue} focus={true} />
-      <Button value={"Сохранить"} onClick={addNewItem} />
-      <Button value={"Отмена"} onClick={onClose} />
+      <Button buttonText={"Сохранить"} onClick={onAdd} />
+      <Button buttonText={"Отмена"} onClick={onClose} />
     </div>
   )
 }

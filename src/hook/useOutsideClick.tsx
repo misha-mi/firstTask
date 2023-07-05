@@ -1,12 +1,12 @@
 
 import { useEffect, useState, MutableRefObject } from "react";
 
-const useOutsideClick = (elementRef: MutableRefObject<HTMLElement | null>, func: () => void, block?: boolean) => {
+const useOutsideClick = (elementRef: MutableRefObject<HTMLElement | null>, func: () => void, blockFunc?: boolean) => {
 
   const [start, setStart] = useState(false);
 
-  const handleClick = (e: Event) => {
-    if (!elementRef.current?.contains(e.target as Node) && start && !block) {
+  const onClick = (e: Event) => {
+    if (!elementRef.current?.contains(e.target as Node) && start && !blockFunc) {
       func();
     }
   }
@@ -14,10 +14,10 @@ const useOutsideClick = (elementRef: MutableRefObject<HTMLElement | null>, func:
   setTimeout(() => setStart(true));
 
   useEffect(() => {
-    document.addEventListener("mousedown", handleClick);
+    document.addEventListener("mousedown", onClick);
 
     return () => {
-      document.removeEventListener("mousedown", handleClick);
+      document.removeEventListener("mousedown", onClick);
     };
   })
 }

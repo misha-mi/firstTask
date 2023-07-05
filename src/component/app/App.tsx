@@ -13,21 +13,21 @@ enum Page {
 }
 
 interface IContext {
-  openPageID: string,
-  setOpenPageID: (c: string) => void
+  openCardID: string,
+  setOpenCardID: (c: string) => void
 }
 
 export const ContextPage = createContext<IContext>({
-  openPageID: "-1",
-  setOpenPageID: () => { },
+  openCardID: "-1",
+  setOpenCardID: () => { },
 })
 
 function App() {
 
-  const [name] = useLocalStorageName("name");
+  const [name] = useLocalStorageName();
 
   const [page, setPage] = useState<Page>((name ? Page.columns : Page.greeting));
-  const [openPageID, setOpenPageID] = useState<string>("-1");
+  const [openCardID, setOpenCardID] = useState<string>("-1");
 
   const acceptGreeting = () => {
     setPage(Page.columns);
@@ -43,7 +43,7 @@ function App() {
 
   return (
     <div className="app">
-      <ContextPage.Provider value={{ openPageID, setOpenPageID }}>
+      <ContextPage.Provider value={{ openCardID, setOpenCardID }}>
         {showPage}
       </ContextPage.Provider>
     </div>

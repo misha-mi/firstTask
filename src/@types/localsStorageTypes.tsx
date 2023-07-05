@@ -2,8 +2,8 @@
 export type TCard = {
   name: string,
   countComments: number,
-  idColumn: number,
-  idCard: string,
+  columnID: number,
+  cardID: string,
   description: string
   author: string
 };
@@ -11,6 +11,6 @@ export type TCard = {
 export type TComment = {
   author: string,
   comment: string,
-  idCard: string,
-  idComment: string
+  cardID: string,
+  commentID: string
 }

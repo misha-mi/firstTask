@@ -11,7 +11,7 @@ interface IPopupGreeting {
 
 const PopupGreeting: FC<IPopupGreeting> = ({ acceptGreeting }) => {
 
-  const [nameUser, setNameUser] = useLocalStorageName("name");
+  const [nameUser, setNameUser] = useLocalStorageName();
 
   const accept = () => {
     if (nameUser !== "") {

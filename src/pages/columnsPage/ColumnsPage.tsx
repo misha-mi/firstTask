@@ -13,52 +13,51 @@ import { ContextPage } from "../../component/app/App";
 
 const ColumnsPage: FC = () => {
 
-  const { openPageID, setOpenPageID } = useContext(ContextPage);
-  const [nameUser, setNameUser] = useLocalStorageName("name");
-  const [columns, setNewName] = useLocalStorageColumn("columns", [
+  const { openCardID, setOpenCardID } = useContext(ContextPage);
+  const [userName, setUserName] = useLocalStorageName();
+  const [columnsName, setColumnsName] = useLocalStorageColumn([
     "TODO",
     "In Progress",
     "Testing",
     "Done"
   ]);
-  const [cards, addValue, deleteCard, modificateCard] = useLocalStorageCard("cards");
-  const [comments] = useLocalStorageComment("comment");
+  const [cards, addCard, deleteCard, modifyCardValue] = useLocalStorageCard();
+  const [comments] = useLocalStorageComment();
 
-  const openCard = (cards.find(item => item.idCard === openPageID));
+  const openCard = (cards.find(item => item.cardID === openCardID));
 
   useEffect(() => {
-    console.log(comments, cards)
     cards.forEach(item => {
-      const count = comments.filter(comment => item.idCard === comment.idCard).length;
-      modificateCard(item.idCard, "countComments", count);
+      const count = comments.filter(comment => item.cardID === comment.cardID).length;
+      modifyCardValue(item.cardID, "countComments", count);
     })
   }, [])
 
   return (
     <div className="columns-page">
-      <TextArea value={nameUser} modificator="columns-page__name" setValue={setNameUser} />
+      <TextArea value={userName} CSSModifier="columns-page__name" setValue={setUserName} />
       <div className="columns-page__wrapper">
-        {columns.map((item, id) => (
+        {columnsName.map((item, id) => (
           <Column
-            name={item}
-            id={id}
+            columnName={item}
+            columnIDForFilter={id}
             key={id}
-            cards={cards}
-            nameAutrhor={nameUser}
-            addCard={addValue}
-            setNameColumn={(newName: string): void => setNewName(id, newName)}
+            cardsData={cards}
+            authorName={userName}
+            addCard={addCard}
+            setColumnName={(newName: string): void => setColumnsName(id, newName)}
           />
         ))}
       </div>
       {
-        openPageID !== "-1" ? (
+        openCardID !== "-1" ? (
           <div className="columns-page__cardPage">
             <CardPage
-              setOpenPageID={setOpenPageID}
-              deleteCard={() => deleteCard(openPageID)}
-              card={openCard}
-              columns={columns}
-              modificate={(key: string, newValue: string | number) => modificateCard(openPageID, key, newValue)}
+              setOpenPageID={setOpenCardID}
+              onDeleteCard={() => deleteCard(openCardID)}
+              cardData={openCard}
+              columns={columnsName}
+              modifyCardValue={(key: string, newValue: string | number) => modifyCardValue(openCardID, key, newValue)}
             />
           </div>
         ) : null

@@ -4,18 +4,18 @@ import "./textArea.sass";
 import { FC, FormEvent, useRef, useEffect } from "react";
 
 interface ITextArea {
-  value: string
-  modificator?: string // класс css
-  mod?: boolean, // переключаетель режимов (true -> textArea; false -> div)
-  focus?: boolean // установка фокуса при рендере компонента
+  value: string,
+  CSSModifier?: string,
+  modificationMode?: boolean,
+  focus?: boolean,
   setValue?: (value: string) => void
 }
 
-const TextArea: FC<ITextArea> = ({ value, modificator = "", mod = true, focus = false, setValue }) => {
+const TextArea: FC<ITextArea> = ({ value, CSSModifier = "", modificationMode = true, focus = false, setValue }) => {
 
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
-  const checkEmpty = (value: string) => { // проверка на пустоту и выделение пустых полей
+  const checkEmpty = (value: string) => {
     if (!value) {
       textAreaRef.current?.classList.add("textArea__empty")
     } else {
@@ -32,13 +32,13 @@ const TextArea: FC<ITextArea> = ({ value, modificator = "", mod = true, focus = 
       setValue(value);
     }
 
-    if (textAreaRef.current != null) { // управление размерами поля
+    if (textAreaRef.current != null) {
       textAreaRef.current.style.height = 0 + "px";
       textAreaRef.current.style.height = textAreaRef.current?.scrollHeight + "px";
     }
   }
 
-  const blur = () => { // обработка сброса focus
+  const onBlur = () => {
     if (focus) {
       textAreaRef.current?.focus();
     } else {
@@ -48,20 +48,20 @@ const TextArea: FC<ITextArea> = ({ value, modificator = "", mod = true, focus = 
 
   useEffect(() => {
     if (focus) {
-      setTimeout(() => textAreaRef.current?.focus()); // задержка перед установкой фокуса, без задержки функция blur не даст установить фокус на другое поле
+      setTimeout(() => textAreaRef.current?.focus());
     }
-    inputTextArea(value); // для коррекции размеров при переключении между режимами
-  }, [mod])
+    inputTextArea(value);
+  }, [modificationMode])
 
-  const showUI = mod ? (
+  const showUI = modificationMode ? (
     <textarea
-      className={"textArea " + modificator}
+      className={"textArea " + CSSModifier}
       value={value}
       ref={textAreaRef}
       onInput={(e: FormEvent<HTMLTextAreaElement>) => inputTextArea((e.target as HTMLTextAreaElement).value)}
-      onBlur={blur}>
+      onBlur={onBlur}>
     </textarea>
-  ) : <div className={"textArea__mod-false " + modificator}>{value}</div>
+  ) : <div className={"textArea__mod-false " + CSSModifier}>{value}</div>
 
 
   return (

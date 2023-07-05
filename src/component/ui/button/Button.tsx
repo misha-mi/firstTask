@@ -4,18 +4,18 @@ import "./button.sass";
 import { FC } from "react";
 
 interface IButton {
-  value: string
+  buttonText: string
   onClick: () => void
 }
 
-const Button: FC<IButton> = ({ value, onClick }) => {
+const Button: FC<IButton> = ({ buttonText, onClick }) => {
 
   return (
     <button
       className={"button"}
       onClick={() => onClick()}
     >
-      {value}
+      {buttonText}
     </button>
   )
 }
